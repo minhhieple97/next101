@@ -21,6 +21,7 @@ export default function Home() {
       <Link href="/about">About page</Link>
       <Link href="/todos">Todos page</Link>
       <Link href="/products">Product List Page</Link>
+      <Link href="/products">Test CICID</Link>
       <button onClick={handleClick}>Click me!</button>
     </div>
   );
