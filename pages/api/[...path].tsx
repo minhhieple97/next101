@@ -9,8 +9,6 @@ export const config = {
 import { NextApiRequest, NextApiResponse } from "next";
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   new Promise<void>((resolve, reject) => {
-    console.log("ABC");
-    const proxy: httpProxy = httpProxy.createProxy();
     const isLogin = req.url === "/api/v1/auth/login";
     console.log(req.url, isLogin);
     const cookies = new Cookies(req, res);
@@ -19,9 +17,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     if (authToken) {
       req.headers["Authorization"] = authToken;
     }
-    if (isLogin) {
-      proxy.once("proxyRes", interceptLoginResponse);
-    }
+
     function interceptLoginResponse(
       proxyRes,
       req: NextApiRequest,
@@ -47,6 +43,10 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         }
       });
     }
+    const proxy: httpProxy = httpProxy.createProxy();
+    if (isLogin) {
+      proxy.once("proxyRes", interceptLoginResponse);
+    }
     proxy.once("error", reject);
     // proxy.once("proxyRes", resolve).once("error", reject).web(req, res, {
     //   changeOrigin: true,
@@ -55,7 +55,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     proxy.web(req, res, {
       changeOrigin: true,
       target: process.env.API_URL,
-      autoRewrite: false,
       selfHandleResponse: isLogin,
     });
   });
