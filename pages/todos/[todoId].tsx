@@ -12,6 +12,10 @@ export interface ITodoDetailPropsInterface {
 }
 const ToDoDetailPage = (props: ITodoDetailPropsInterface) => {
   const router = useRouter();
+  if (router.isFallback)
+    return (
+      <div style={{ fontSize: "2rem", textAlign: "center" }}>Loading...</div>
+    );
   return (
     <div>
       <h1>Todo detail page</h1>
@@ -23,6 +27,13 @@ const ToDoDetailPage = (props: ITodoDetailPropsInterface) => {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   console.log("getStaticPaths");
+  // const resp = await fetch(`https://jsonplaceholder.typicode.com/todos`);
+  // const data: ITodo[] = await resp.json();
+  // const paths = data.map((todo) => ({
+  //   params: {
+  //     todoId: todo.id,
+  //   },
+  // }));
   return {
     paths: [
       {
@@ -45,8 +56,23 @@ export const getStaticPaths: GetStaticPaths = async () => {
           todoId: "4",
         },
       },
+      {
+        params: {
+          todoId: "5",
+        },
+      },
+      {
+        params: {
+          todoId: "6",
+        },
+      },
+      {
+        params: {
+          todoId: "7",
+        },
+      },
     ],
-    fallback: false,
+    fallback: true,
   };
 };
 export const getStaticProps: GetStaticProps = async (context) => {
@@ -59,6 +85,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const data: ITodo = await resp.json();
   return {
     props: { todos: data },
+    revalidate: 5,
   };
 };
 

@@ -1,10 +1,9 @@
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { MainLayout } from "@/components/layout/main";
+import { NextPageWithLayout } from "../models";
 
-export default function Home() {
+const Home: NextPageWithLayout = () => {
   const router = useRouter();
   const handleClick = () => {
     router.push({
@@ -25,4 +24,6 @@ export default function Home() {
       <button onClick={handleClick}>Click me!</button>
     </div>
   );
-}
+};
+Home.Layout = MainLayout;
+export default Home;
