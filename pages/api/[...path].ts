@@ -48,14 +48,14 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       proxy.once("proxyRes", interceptLoginResponse);
     }
     proxy.once("error", reject);
-    // proxy.once("proxyRes", resolve).once("error", reject).web(req, res, {
-    //   changeOrigin: true,
-    //   target: process.env.API_URL,
-    // });
-    proxy.web(req, res, {
+    proxy.once("proxyRes", resolve).once("error", reject).web(req, res, {
       changeOrigin: true,
       target: process.env.API_URL,
-      selfHandleResponse: isLogin,
     });
+    // proxy.web(req, res, {
+    //   changeOrigin: true,
+    //   target: process.env.API_URL,
+    //   selfHandleResponse: isLogin,
+    // });
   });
 }
